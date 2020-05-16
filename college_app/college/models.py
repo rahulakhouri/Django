@@ -6,12 +6,16 @@ from django.contrib.auth.models import AbstractUser
 #4. College : ID, CollegeName
 
 class AppUser(AbstractUser):
+    STUDENT = 1
+    TEACHER = 2
+    COLLEGEADMIN =3 
     USER_TYPE_CHOICES = (
-      (1, 'student'),
-      (2, 'teacher'),
-      (3, 'collegeadmin')
+      (STUDENT, 'student'),
+      (TEACHER, 'teacher'),
+      (COLLEGEADMIN, 'collegeadmin')
         )
-    user_type = models.PositiveSmallIntegerField(choices=USER_TYPE_CHOICES,null=True)
+    
+    user_type = models.PositiveSmallIntegerField(choices = USER_TYPE_CHOICES,null=True)
 
 
 class College(models.Model):
@@ -30,7 +34,7 @@ class Department(models.Model):
     dept_type = models.PositiveSmallIntegerField(choices=DEPT_TYPE_CHOICES)
 
     def __str__(self):
-        return self.dept_type + self.college.college_name
+        return str(self.dept_type) + self.college.college_name
     
 
 
@@ -52,6 +56,8 @@ class Student(models.Model):
     
     # company name
     mother_name = models.CharField(max_length=200, default=None, blank=True, null=True)
+    
+    department = models.OneToOneField(Department,null=True,on_delete="cascade")
 
 
 class Teacher(models.Model):
@@ -64,4 +70,4 @@ class Teacher(models.Model):
     
     
     # company name
-    department_name = models.CharField(max_length=20, default=None, blank=True, null=True)
+    department = models.OneToOneField(Department,null=True,on_delete="cascade")

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 
 from .forms import StudentForm  
+from .models import AppUser, CollegeAdmin
 
 
 
@@ -13,6 +14,13 @@ from .forms import StudentForm
 #@login_required
 def hello(request):
    loggedin = request.user.is_authenticated
+   if not loggedin:
+      return HttpResponseRedirect('/index/')
+   if request.user.user_type == AppUser.COLLEGEADMIN:
+      ca= CollegeAdmin.objects.get(user = request.user)
+      cn = ca.college.college_name
+      #template = loader.get_template('colleghome.html') # getting our template  
+      return render(request,"college/collegehome.html",{'college_name':cn})  
    template = loader.get_template('index.html') # getting our template  
    return HttpResponse(template.render())       # rendering the template in HttpResponse 
 

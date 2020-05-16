@@ -10,3 +10,7 @@ admin.site.register(CollegeAdmin)
 admin.site.register(Student)
 
 admin.site.register(Teacher)
+
+admin.site.register(AppUser)
+
+admin.site.register(Department)
